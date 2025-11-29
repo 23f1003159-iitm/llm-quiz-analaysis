@@ -1,0 +1,10 @@
+[
+  {
+    "timestamp": 1764407612.750443,
+    "step": "TEST_STEP",
+    "details": {
+      "message": "Hello World",
+      "status": "ok"
+    }
+  }
+]

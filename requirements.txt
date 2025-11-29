@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+python-dotenv
+playwright
+tenacity
+httpx
+pandas
+numpy
+matplotlib
+pypdf
+beautifulsoup4
+requests
+openpyxl
+email-validator
+openai

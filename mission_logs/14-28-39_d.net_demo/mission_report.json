@@ -1,0 +1,30 @@
+[
+  {
+    "timestamp": 1764406719.587303,
+    "step": "START",
+    "details": {
+      "url": "https://tds-llm-analysis.s-anand.net/demo"
+    }
+  },
+  {
+    "timestamp": 1764406727.303804,
+    "step": "OBSERVATION",
+    "details": {
+      "files": []
+    }
+  },
+  {
+    "timestamp": 1764406745.854623,
+    "step": "PLANNING",
+    "details": {
+      "message": "Gemini Error: 'candidates'"
+    }
+  },
+  {
+    "timestamp": 1764406745.85492,
+    "step": "ERROR",
+    "details": {
+      "error": "CRITICAL: 'question'"
+    }
+  }
+]

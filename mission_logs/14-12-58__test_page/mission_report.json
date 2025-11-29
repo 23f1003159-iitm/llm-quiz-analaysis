@@ -1,0 +1,27 @@
+[
+  {
+    "timestamp": 1764405778.568214,
+    "step": "START",
+    "details": {
+      "url": "http://localhost:8002/test_page"
+    }
+  },
+  {
+    "timestamp": 1764405784.881952,
+    "step": "OBSERVATION",
+    "details": {
+      "files": [
+        "secret.csv"
+      ]
+    }
+  },
+  {
+    "timestamp": 1764405797.126399,
+    "step": "PLANNING",
+    "details": {
+      "question": "We have auto-downloaded a file named secret.csv. Read the file and calculate the sum of the 'value' column.",
+      "submit_url": "http://localhost:8002/submit",
+      "format_hint": "The answer format should be JSON: { \"answer\": 123 }"
+    }
+  }
+]
