@@ -1,15 +1,32 @@
+# Web Framework
 fastapi
-uvicorn
+uvicorn[standard]
 python-dotenv
-playwright
-tenacity
+
+# HTTP & Scraping
 httpx
+requests
+beautifulsoup4
+playwright
+
+# Data Processing
 pandas
 numpy
-matplotlib
-pypdf
-beautifulsoup4
-requests
 openpyxl
+xlrd
+
+# PDF Processing
+pypdf
+
+# Visualization
+matplotlib
+
+# Validation
+pydantic
 email-validator
+
+# Retry Logic
+tenacity
+
+# Optional: Direct OpenAI API
 openai

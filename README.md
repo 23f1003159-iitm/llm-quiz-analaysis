@@ -1,27 +1,32 @@
-# LLM Quiz God Mode 🤖
+# LLM Quiz Solver 🤖
 
 An intelligent agent system that uses LLMs to solve web-based quiz challenges by scraping content, downloading files, analyzing data, and submitting answers automatically.
 
 ## ✨ Features
 
-- **Smart Scraping**: Automatically extracts text, links, and downloads files from web pages
-- **LLM-Powered Analysis**: Uses AI models (GPT-5-nano and Gemini) to understand questions and generate solutions
+- **Smart Scraping**: Automatically extracts text, links, and downloads files from JavaScript-rendered web pages
+- **LLM-Powered Analysis**: Uses AI models (GPT-4.1-nano) to understand questions and generate solutions
 - **Code Execution Sandbox**: Safely executes generated Python code to process data
 - **Mission Logging**: Tracks all operations with screenshots and detailed logs
-- **Secure API**: Authentication system to protect against unauthorized access
+- **Secure API**: Authentication via secret matching (HTTP 400 for invalid JSON, 403 for invalid secrets)
+- **Auto-retry**: Intelligent retry logic with different approaches on failure
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- Python 3.11
-- uv (Python package manager)
+- Python 3.11+
+- Playwright browsers
 
 ### Installation
 
-1. **Install dependencies**:
+1. **Clone and setup**:
 ```bash
-uv pip install -r requirements.txt
+git clone <your-repo-url>
+cd llm_quiz_god_mode
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
 2. **Install Playwright browsers**:
@@ -31,74 +36,123 @@ python -m playwright install chromium
 
 3. **Configure environment variables**:
 
-Create a `.env` file with:
+Create a `.env` file:
 ```env
-STUDENT_EMAIL="your_email@example.com"
-STUDENT_SECRET="your_secret_password"
+STUDENT_SECRET="your_secret_from_google_form"
 AIPIPE_TOKEN="your_aipipe_token"
-GEMINI_API_KEY="your_gemini_api_key"
+OPENAI_API_KEY="optional_openai_key_for_whisper"
 ```
 
-### Verification
-
-Run the comprehensive test suite to verify everything is working:
+### Running the Server
 
 ```bash
-python run_all_tests.py
+# Development
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+# Production
+uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-This will automatically:
-- ✅ Check all dependencies are installed
-- ✅ Test LLM connectivity
-- ✅ Verify code executor
-- ✅ Test mission logger
-- ✅ Start servers and test API security
-- ✅ Test smart scraper functionality
+### Exposing via ngrok (for public endpoint)
 
-## 📋 Manual Testing (Step by Step)
-
-### Step 1: Check Environment
 ```bash
-python check_step_1.py
+ngrok http 8000
 ```
-Verifies all required libraries (fastapi, playwright, pandas, etc.) are installed.
 
-### Step 2: Test Server Security (requires servers running)
+Use the generated HTTPS URL as your API endpoint in the Google Form.
+
+## 📡 API Specification
+
+### POST /quiz
+
+Receives quiz tasks from the evaluation server.
+
+**Request Body:**
+```json
+{
+  "email": "your_email@example.com",
+  "secret": "your_secret",
+  "url": "https://tds-llm-analysis.s-anand.net/quiz-xxx"
+}
+```
+
+**Responses:**
+- `200 OK`: Task accepted, processing in background
+- `400 Bad Request`: Invalid JSON payload
+- `403 Forbidden`: Invalid secret
+
+### GET /health
+
+Health check endpoint.
+
+**Response:**
+```json
+{
+  "status": "healthy",
+  "secret_configured": true
+}
+```
+
+## 🧪 Testing
+
+Test with the demo endpoint:
 ```bash
-# Terminal 1 - Start main server
-python -m uvicorn app.main:app --port 8000
-
-# Terminal 2 - Start test server
-python tests/dummy_advanced.py
-
-# Terminal 3 - Run test
-python check_step_2.py
+curl -X POST http://localhost:8000/quiz \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "your_email",
+    "secret": "your_secret",
+    "url": "https://tds-llm-analysis.s-anand.net/demo"
+  }'
 ```
-Tests that the API correctly blocks invalid credentials and accepts valid ones.
 
-### Step 3: Test LLM Connection
-```bash
-python check_step_3.py
-```
-Verifies the AI can answer simple questions.
+## 📁 Project Structure
 
-### Step 4: Test Smart Scraper (requires servers running)
-```bash
-# With servers still running from Step 2
-python check_step_4.py
 ```
-Tests that the agent can download files from web pages.
+llm_quiz_god_mode/
+├── app/
+│   ├── main.py        # FastAPI server with endpoints
+│   ├── agent.py       # Main quiz solving logic
+│   ├── llm.py         # LLM API integration
+│   ├── prompts.py     # System and user prompts
+│   ├── executor.py    # Code execution sandbox
+│   ├── scraper.py     # Web scraping utilities
+│   ├── transcriber.py # Audio transcription (Whisper)
+│   ├── logger.py      # Mission logging
+│   └── models.py      # Pydantic models
+├── downloads/         # Temporary file downloads
+├── mission_logs/      # Execution logs and screenshots
+├── requirements.txt
+├── Dockerfile
+└── README.md
+```
 
-### Step 5: Test Code Executor
-```bash
-python check_step_5.py
-```
-Verifies the sandbox can execute generated code safely.
+## 🔧 How It Works
 
-### Step 6: Test Mission Logger
-```bash
-python check_step_6.py
-```
+1. **Receive Task**: POST request with quiz URL
+2. **Scrape Page**: Load JavaScript-rendered page, extract text/links, download files
+3. **Plan**: LLM analyzes page to extract question, submit URL, and format hint
+4. **Execute**: LLM generates Python code to solve the task
+5. **Submit**: POST answer to the submit URL
+6. **Iterate**: Handle response, retry if wrong, proceed to next question if correct
+
+## 📝 Supported Question Types
+
+- CSV/Excel data analysis
+- PDF text extraction
+- API data fetching
+- Web scraping
+- Image/chart generation
+- Audio transcription
+- Mathematical calculations
+- JSON manipulation
+
+## ⚠️ Important Notes
+
+- The endpoint must respond within 3 minutes of receiving the original POST
+- Answers can be: boolean, number, string, base64 URI, or JSON object
+- JSON payload must be under 1MB
+- Do not hardcode any URLs - always parse from quiz page
 Checks that operations are logged correctly.
 
 ## 🎯 Running the Full Agent

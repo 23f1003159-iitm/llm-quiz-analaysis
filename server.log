@@ -1,0 +1,11 @@
+INFO:     Started server process [24850]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:51916 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51999 - "GET /health HTTP/1.1" 200 OK
+INFO:     2409:40e4:11e1:6615:48f8:1930:6261:6c61:0 - "GET /health HTTP/1.1" 200 OK
+INFO:     2409:40e4:11e1:6615:48f8:1930:6261:6c61:0 - "GET /quiz HTTP/1.1" 405 Method Not Allowed
+INFO:     2409:40e4:11e1:6615:48f8:1930:6261:6c61:0 - "GET /quiz HTTP/1.1" 405 Method Not Allowed
+📨 Incoming request for: https://tds-llm-analysis.s-anand.net/demo
+INFO:     152.59.146.70:0 - "POST /quiz HTTP/1.1" 200 OK
